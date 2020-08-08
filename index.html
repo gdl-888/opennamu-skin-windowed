@@ -220,9 +220,11 @@
 
                     $(this).attr('data-setaswindow', 'true');
 
+                    const parentWindow = $(this).closest('.wiki-window');
+
                     const alink = $(this);
 
-                    const linkWindow = createWindow('대기 중...', '여는 중입니다...', '750px', '600px');
+                    const linkWindow = createWindow('대기 중...', '여는 중입니다...', '750px', '600px', Number(parentWindow.css('top').replace(/px$/, '')) + 30 + 'px', Number(parentWindow.css('left').replace(/px$/, '')) + 30 + 'px');
 
                     $.ajax({
                         url: $(this).attr('href'),
@@ -236,15 +238,25 @@
                                 linkWindow.children('.titlebar').text( 'JSON' );
                                 linkWindow.children('div.wiki-article').html( '<pre>' + d.replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;').replace(/[&]/g, '&amp;') + '</pre>' );
                             } catch(e) {
-                                if($(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content form').length) {
+                                const $html = $(d);
+                                
+                                if($html.find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content form').length) {
+                                    /*
                                     linkWindow.children('div.wiki-article').html( '지금 열려는 페이지는 창으로 열리지 못합니다. 선택한 페이지로 이동합니다.' );
+                                    linkWindow.children('.titlebar').text('오류');
                                     location.href = alink.attr('href');
                                     return;
+                                    */
+                                    $html.find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content form').each(function() {
+                                        if(!$(this).attr('action')) {
+                                            $(this).attr('action', alink.attr('href'));
+                                        }
+                                    });
                                 }
 
                                 linkWindow.children('div.wiki-article').text('');
-                                linkWindow.children('.titlebar').text( $(d).filter('title').html()/*.replace((new RegExp('\\s[-]\\s{{ imp[1][0] }}' + '$')), '')*/ );
-                                linkWindow.children('div.wiki-article').html( $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html() );
+                                linkWindow.children('.titlebar').text( $html.filter('title').html()/*.replace((new RegExp('\\s[-]\\s{{ imp[1][0] }}' + '$')), '')*/ );
+                                linkWindow.children('div.wiki-article').html( $html.find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html() );
                             
                                 linkAsNewWindow(linkWindow);
                             }
