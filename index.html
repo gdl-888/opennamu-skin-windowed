@@ -246,7 +246,7 @@
             function createWindow(title, content, width, height, top, left) {
                 const newWindow = $('<div class=wiki-window>' +
                         '<div class=titlebar>' + title + '</div>' +
-                        '<a title="닫기" class=close-btn>[-]</a>' +
+                        '<a title="닫기" class=close-btn>[×]</a>' +
                         '<div class=wiki-article>' + content + '</div>' +
                   '</div>');
                 newWindow.css({
@@ -274,12 +274,13 @@
                     success: function(d) {
                         if(!d['data'])
                             wikiWindow.children('div.wiki-article').text('문서가 없거나 권한이 없읍니다.');
-                        else
+                        else {
                             wikiWindow.children('div.wiki-article').text('');
 
                             wikiWindow.children('div.wiki-article').html(d['data']);
 
                             eval(d['js_data']);
+                        }
                     },
                     error: function(d) {
                         wikiWindow.children('div.wiki-article').text('서버가 응답하지 않습니다.');
