@@ -1,0 +1,1 @@
+# opennamu-skin-windowed
