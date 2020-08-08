@@ -228,7 +228,7 @@
 
                     $.ajax({
                         url: $(this).attr('href'),
-                        method: 'GET',
+                        type: 'GET',
                         dataType: 'html',
                         success: function(d) {
                             try {
@@ -250,6 +250,13 @@
                                     $html.find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content form').each(function() {
                                         if(!$(this).attr('action')) {
                                             $(this).attr('action', alink.attr('href'));
+                                        }
+
+                                        const submitCode = "var _submitting_form = $(this); $.ajax({ url: '" + $(this).attr('action').replace(/'/g, '\\\'') + "', type: '" + $(this).attr('method').toUpperCase() + "', data: _submitting_form.serialize(), dataType: 'html', success: function(d) { createWindow($(d).filter('title').text(), $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html(), '750px', '600px', Number(_submitting_form.closest('.wiki-window').css('top').replace(/px$/, '')) + 30 + 'px', Number(_submitting_form.closest('.wiki-window').css('left').replace(/px$/, '')) + 30 + 'px'); _submitting_form.closest('.wiki-window').remove(); }, error: function(d) { _submitting_form.closest('.wiki-window').remove(); } })";
+                                        if(!$(this).attr('onsubmit')) {
+                                            $(this).attr('onsubmit', submitCode + '; return false;');
+                                        } else {
+                                            $(this).attr('onsubmit', submitCode + '; ' + $(this).attr('onsubmit'));
                                         }
                                     });
                                 }
@@ -341,7 +348,7 @@
 
                 $.ajax({
                     url: '/api/w/' + title,
-                    method: 'GET',
+                    type: 'GET',
                     dataType: 'json',
                     success: function(d) {
                         if(!d['data'])
@@ -367,7 +374,7 @@
 
                 $.ajax({
                     url: '/api/recent_changes?repeat=0&page=20&num=1',
-                    method: 'GET',
+                    type: 'GET',
                     dataType: 'json',
                     success: function(d) {
                         var ret = '';
@@ -403,7 +410,7 @@
 
                 $.ajax({
                     url: '/recent_discuss',
-                    method: 'GET',
+                    type: 'GET',
                     dataType: 'html',
                     success: function(d) {
                         recentWindow.children('div.wiki-article').text('');
@@ -422,7 +429,7 @@
 
                 $.ajax({
                     url: '/other',
-                    method: 'GET',
+                    type: 'GET',
                     dataType: 'html',
                     success: function(d) {
                         toolWindow.children('div.wiki-article').text('');
@@ -441,7 +448,7 @@
 
                 $.ajax({
                     url: '/manager',
-                    method: 'GET',
+                    type: 'GET',
                     dataType: 'html',
                     success: function(d) {
                         managerWindow.children('div.wiki-article').text('');
@@ -460,7 +467,7 @@
 
                 $.ajax({
                     url: '/user',
-                    method: 'GET',
+                    type: 'GET',
                     dataType: 'html',
                     success: function(d) {
                         userWindow.children('div.wiki-article').text('');
