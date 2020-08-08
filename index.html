@@ -6,6 +6,9 @@
 
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 
+    <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
+    <link rel=stylesheet href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css" />
+
     {{ imp[3][3]|safe }}
     {{ imp[1][5]|safe }}
     {{ imp[2][3]|safe }}
@@ -204,6 +207,42 @@
 
             var px, py, ox, oy;
 
+            function linkAsNewWindow(win) {
+                win.find('.wiki-article a[href]:not([href="#"])').click(function() {
+                    if($(this).attr('href').toLowerCase().startsWith('javascript:')) return;
+                    if($(this).attr('data-setaswindow') == 'true') return;
+
+                    $(this).attr('data-setaswindow', 'true');
+
+                    const alink = $(this);
+
+                    const linkWindow = createWindow('대기 중', '여는 중입니다...', '750px', '600px');
+
+                    $.ajax({
+                        url: $(this).attr('href'),
+                        method: 'GET',
+                        dataType: 'html',
+                        success: function(d) {
+                            if($(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content form').length) {
+                                linkWindow.children('div.wiki-article').html( '지금 열려는 페이지는 창으로 열리지 못합니다. 선택한 페이지로 <a href="' + html.escape(alink.attr('href')) + '">이동</a>하십시오...' );
+                                return;
+                            }
+
+                            linkWindow.children('div.wiki-article').text('');
+                            linkWindow.children('.titlebar').text( $(d).filter('title').html()/*.replace((new RegExp('\\s[-]\\s{{ imp[1][0] }}' + '$')), '')*/ );
+                            linkWindow.children('div.wiki-article').html( $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html() );
+                            
+                            linkAsNewWindow(linkWindow);
+                        },
+                        error: function(d) {
+                            linkWindow.children('div.wiki-article').html('서버가 응답하지 않습니다.');
+                        }
+                    });
+
+                    return false;
+                });
+            }
+
             /* https://www.w3schools.com/howto/howto_js_draggable.asp 참고함 */
             function setDraggable() {
                 $('div.wiki-window').each(function() {
@@ -230,6 +269,8 @@
                             el.style.left = el.offsetLeft - px + 'px';
                         });
                     });
+
+                    if($(el).attr('id') != 'toolsWindow') linkAsNewWindow($(el));
                 });
 
                 $('div.wiki-window .close-btn').click(function() {
@@ -280,6 +321,8 @@
                             wikiWindow.children('div.wiki-article').html(d['data']);
 
                             eval(d['js_data']);
+
+                            linkAsNewWindow(wikiWindow);
                         }
                     },
                     error: function(d) {
@@ -299,11 +342,13 @@
                         var ret = '';
 
                         for(r of d) {
-                            ret += '<li><a href="' + encodeURIComponent('/w/' + r[1]) + '">' + html.escape(r[1]) + '</a></li>';
+                            ret += '<li><a href="' + html.escape('/w/' + r[1]) + '">' + html.escape(r[1]) + '</a></li>';
                         }
 
                         recentWindow.children('div.wiki-article').text('');
                         recentWindow.children('div.wiki-article').html(ret + '<li><a href=/recent_changes>[더보기...]</a></li>');
+
+                        linkAsNewWindow(recentWindow);
                     },
                     error: function(d) {
                         recentWindow.children('div.wiki-article').html('서버가 응답하지 않습니다.<li><a href=/recent_changes>[더보기...]</a></li>');
@@ -332,6 +377,8 @@
                     success: function(d) {
                         recentWindow.children('div.wiki-article').text('');
                         recentWindow.children('div.wiki-article').html( $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html() );
+                    
+                        linkAsNewWindow(recentWindow);
                     },
                     error: function(d) {
                         recentWindow.children('div.wiki-article').html('서버가 응답하지 않습니다.<li><a href=/recent_changes>[더보기...]</a></li>');
@@ -340,52 +387,58 @@
             });
 
             $('a#toolsLink').click(function() {
-                const recentWindow = createWindow('특수 기능', '불러오는 중...', '320px', '420px');
+                const toolWindow = createWindow('특수 기능', '불러오는 중...', '320px', '420px');
 
                 $.ajax({
                     url: '/other',
                     method: 'GET',
                     dataType: 'html',
                     success: function(d) {
-                        recentWindow.children('div.wiki-article').text('');
-                        recentWindow.children('div.wiki-article').html( $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html() );
+                        toolWindow.children('div.wiki-article').text('');
+                        toolWindow.children('div.wiki-article').html( $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html() );
+                    
+                        linkAsNewWindow(toolWindow);
                     },
                     error: function(d) {
-                        recentWindow.children('div.wiki-article').html('서버가 응답하지 않습니다.<li><a href=/recent_changes>[더보기...]</a></li>');
+                        toolWindow.children('div.wiki-article').html('서버가 응답하지 않습니다.<li><a href=/recent_changes>[더보기...]</a></li>');
                     }
                 });
             });
 
             $('a#managerLink').click(function() {
-                const recentWindow = createWindow('관리 기능', '불러오는 중...', '340px', '420px');
+                const managerWindow = createWindow('관리 기능', '불러오는 중...', '340px', '420px');
 
                 $.ajax({
                     url: '/manager',
                     method: 'GET',
                     dataType: 'html',
                     success: function(d) {
-                        recentWindow.children('div.wiki-article').text('');
-                        recentWindow.children('div.wiki-article').html( $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html() );
+                        managerWindow.children('div.wiki-article').text('');
+                        managerWindow.children('div.wiki-article').html( $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html() );
+                    
+                        linkAsNewWindow(managerWindow);
                     },
                     error: function(d) {
-                        recentWindow.children('div.wiki-article').html('서버가 응답하지 않습니다.<li><a href=/recent_changes>[더보기...]</a></li>');
+                        managerWindow.children('div.wiki-article').html('서버가 응답하지 않습니다.<li><a href=/recent_changes>[더보기...]</a></li>');
                     }
                 });
             });
 
             $('a#userLink').click(function() {
-                const recentWindow = createWindow('사용자 도구', '불러오는 중...', '420px', '380px');
+                const userWindow = createWindow('사용자 도구', '불러오는 중...', '420px', '380px');
 
                 $.ajax({
                     url: '/user',
                     method: 'GET',
                     dataType: 'html',
                     success: function(d) {
-                        recentWindow.children('div.wiki-article').text('');
-                        recentWindow.children('div.wiki-article').html( $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html() );
+                        userWindow.children('div.wiki-article').text('');
+                        userWindow.children('div.wiki-article').html( $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html() );
+                    
+                        linkAsNewWindow(userWindow);
                     },
                     error: function(d) {
-                        recentWindow.children('div.wiki-article').html('서버가 응답하지 않습니다.<li><a href=/recent_changes>[더보기...]</a></li>');
+                        userWindow.children('div.wiki-article').html('서버가 응답하지 않습니다.<li><a href=/recent_changes>[더보기...]</a></li>');
                     }
                 });
             });
@@ -395,11 +448,12 @@
 
                 $.ajax({
                     url: '/alarm',
-                    method: 'GET',
                     dataType: 'html',
                     success: function(d) {
                         recentWindow.children('div.wiki-article').text('');
                         recentWindow.children('div.wiki-article').html( $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html() );
+                    
+                        linkAsNewWindow(recentWindow);
                     },
                     error: function(d) {
                         recentWindow.children('div.wiki-article').html('서버가 응답하지 않습니다.<li><a href=/recent_changes>[더보기...]</a></li>');
@@ -522,7 +576,7 @@
             </div>
         </div>
         
-        <div class=wiki-window style="width: 200px;  left: 10px; top: 50px;">
+        <div class=wiki-window id=toolsWindow style="width: 200px;  left: 10px; top: 50px;">
             <div class=titlebar>메뉴</div>
             <a title="접기" class=fold-btn>[-]</a>
             <div class=wiki-article>
