@@ -191,6 +191,8 @@
 
     <script>
         $(function () {
+            if($(window).width() >= 1080) $("grp.for-mobile").remove();
+
             const html = {
 	            escape: function(content = '') {
 		            content = content.replace(/[<]/gi, '&lt;');
@@ -553,9 +555,9 @@
     <grp class=for-mobile>
         {% if menu != 0 %}
             <div>
-            {% for item in menu %}
-                <a href="/{{ item[0] }}">{{ item[1] }}</a> |
-            {% endfor %}
+                {% for item in menu %}
+                    <a href="/{{ item[0] }}">{{ item[1] }}</a> |
+                {% endfor %}
             </div>
         {% endif %}
 
