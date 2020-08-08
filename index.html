@@ -229,17 +229,25 @@
                         method: 'GET',
                         dataType: 'html',
                         success: function(d) {
-                            if($(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content form').length) {
-                                linkWindow.children('div.wiki-article').html( '지금 열려는 페이지는 창으로 열리지 못합니다. 선택한 페이지로 이동합니다.' );
-                                location.href = alink.attr('href');
-                                return;
-                            }
+                            try {
+                                JSON.parse(d);
 
-                            linkWindow.children('div.wiki-article').text('');
-                            linkWindow.children('.titlebar').text( $(d).filter('title').html()/*.replace((new RegExp('\\s[-]\\s{{ imp[1][0] }}' + '$')), '')*/ );
-                            linkWindow.children('div.wiki-article').html( $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html() );
+                                linkWindow.children('div.wiki-article').text('');
+                                linkWindow.children('.titlebar').text( 'JSON' );
+                                linkWindow.children('div.wiki-article').html( '<pre>' + d.replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;').replace(/[&]/g, '&amp;') + '</pre>' );
+                            } catch(e) {
+                                if($(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content form').length) {
+                                    linkWindow.children('div.wiki-article').html( '지금 열려는 페이지는 창으로 열리지 못합니다. 선택한 페이지로 이동합니다.' );
+                                    location.href = alink.attr('href');
+                                    return;
+                                }
+
+                                linkWindow.children('div.wiki-article').text('');
+                                linkWindow.children('.titlebar').text( $(d).filter('title').html()/*.replace((new RegExp('\\s[-]\\s{{ imp[1][0] }}' + '$')), '')*/ );
+                                linkWindow.children('div.wiki-article').html( $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html() );
                             
-                            linkAsNewWindow(linkWindow);
+                                linkAsNewWindow(linkWindow);
+                            }
                         },
                         error: function(d) {
                             linkWindow.children('div.wiki-article').html('서버가 응답하지 않습니다.');
