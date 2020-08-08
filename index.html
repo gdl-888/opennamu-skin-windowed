@@ -218,7 +218,7 @@
 
                     const alink = $(this);
 
-                    const linkWindow = createWindow('대기 중', '여는 중입니다...', '750px', '600px');
+                    const linkWindow = createWindow('대기 중...', '여는 중입니다...', '750px', '600px');
 
                     $.ajax({
                         url: $(this).attr('href'),
@@ -226,7 +226,8 @@
                         dataType: 'html',
                         success: function(d) {
                             if($(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content form').length) {
-                                linkWindow.children('div.wiki-article').html( '지금 열려는 페이지는 창으로 열리지 못합니다. 선택한 페이지로 <a href="' + html.escape(alink.attr('href')) + '">이동</a>하십시오...' );
+                                linkWindow.children('div.wiki-article').html( '지금 열려는 페이지는 창으로 열리지 못합니다. 선택한 페이지로 이동합니다.' );
+                                location.href = alink.attr('href');
                                 return;
                             }
 
