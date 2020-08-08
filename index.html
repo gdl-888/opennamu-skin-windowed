@@ -212,6 +212,10 @@
             function linkAsNewWindow(win) {
                 win.find('.wiki-article a[href]:not([href="#"])').click(function() {
                     if($(this).attr('href').toLowerCase().startsWith('javascript:')) return;
+                    if($(this).attr('href').toLowerCase().startsWith('//')) return;
+                    if($(this).attr('href').toLowerCase().startsWith('http://')) return;
+                    if($(this).attr('href').toLowerCase().startsWith('https://')) return;
+                    if($(this).attr('href').toLowerCase().startsWith('ftp://')) return;
                     if($(this).attr('data-setaswindow') == 'true') return;
 
                     $(this).attr('data-setaswindow', 'true');
