@@ -252,9 +252,10 @@
                                             $(this).attr('action', alink.attr('href'));
                                         }
 
-                                        const submitCode = "var _submitting_form = $(this); $.ajax({ url: '" + $(this).attr('action').replace(/'/g, '\\\'') + "', type: '" + $(this).attr('method').toUpperCase() + "', data: _submitting_form.serialize(), dataType: 'html', success: function(d) { createWindow($(d).filter('title').text(), $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html(), '750px', '600px', Number(_submitting_form.closest('.wiki-window').css('top').replace(/px$/, '')) + 30 + 'px', Number(_submitting_form.closest('.wiki-window').css('left').replace(/px$/, '')) + 30 + 'px'); _submitting_form.closest('.wiki-window').remove(); }, error: function(d) { _submitting_form.closest('.wiki-window').remove(); } })";
+                                        // const submitCode = "var _submitting_form = $(this); $.ajax({ url: '" + $(this).attr('action').replace(/'/g, '\\\'') + "', type: '" + $(this).attr('method').toUpperCase() + "', data: _submitting_form.serialize(), dataType: 'html', success: function(d) { createWindow($(d).filter('title').text(), $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html(), '750px', '600px', Number(_submitting_form.closest('.wiki-window').css('top').replace(/px$/, '')) + 30 + 'px', Number(_submitting_form.closest('.wiki-window').css('left').replace(/px$/, '')) + 30 + 'px'); _submitting_form.closest('.wiki-window').remove(); }, error: function(d) { _submitting_form.closest('.wiki-window').remove(); } })";
+                                        const submitCode = "return confirm('현재 열린 창들을 닫고 양식을 전송합니다.');";
                                         if(!$(this).attr('onsubmit')) {
-                                            $(this).attr('onsubmit', submitCode + '; return false;');
+                                            $(this).attr('onsubmit', submitCode + ';');
                                         } else {
                                             $(this).attr('onsubmit', submitCode + '; ' + $(this).attr('onsubmit'));
                                         }
