@@ -266,26 +266,30 @@
 							} catch(e) {
                                 const $html = $(d);
                                 
-                                if($html.find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content form').length) {
-                                    /*
-                                    linkWindow.children('div.wiki-article').html( '지금 열려는 페이지는 창으로 열리지 못합니다. 선택한 페이지로 이동합니다.' );
-                                    linkWindow.children('.titlebar').text('오류');
-                                    location.href = alink.attr('href');
-                                    return;
-                                    */
-                                    $html.find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content form').each(function() {
-                                        if(!$(this).attr('action')) {
-                                            $(this).attr('action', alink.attr('href'));
-                                        }
+                                if(alink.attr('href').startsWith('/thread/')) {
+                                    $html.find('.wiki-window#mainWindow .wiki-article form').attr('id', 'comment-submit-form');
+                                } else {
+                                    if($html.find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content form').length) {
+                                        /*
+                                        linkWindow.children('div.wiki-article').html( '지금 열려는 페이지는 창으로 열리지 못합니다. 선택한 페이지로 이동합니다.' );
+                                        linkWindow.children('.titlebar').text('오류');
+                                        location.href = alink.attr('href');
+                                        return;
+                                        */
+                                        $html.find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content form').each(function() {
+                                            if(!$(this).attr('action')) {
+                                                $(this).attr('action', alink.attr('href'));
+                                            }
 
-                                        // const submitCode = "var _submitting_form = $(this); $.ajax({ url: '" + $(this).attr('action').replace(/'/g, '\\\'') + "', type: '" + $(this).attr('method').toUpperCase() + "', data: _submitting_form.serialize(), dataType: 'html', success: function(d) { createWindow($(d).filter('title').text(), $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html(), '750px', '600px', Number(_submitting_form.closest('.wiki-window').css('top').replace(/px$/, '')) + 30 + 'px', Number(_submitting_form.closest('.wiki-window').css('left').replace(/px$/, '')) + 30 + 'px'); _submitting_form.closest('.wiki-window').remove(); }, error: function(d) { _submitting_form.closest('.wiki-window').remove(); } })";
-                                        const submitCode = "return confirm('현재 열린 창들을 닫고 양식을 전송합니다.');";
-                                        if(!$(this).attr('onsubmit')) {
-                                            $(this).attr('onsubmit', submitCode + ';');
-                                        } else {
-                                            $(this).attr('onsubmit', submitCode + '; ' + $(this).attr('onsubmit'));
-                                        }
-                                    });
+                                            // const submitCode = "var _submitting_form = $(this); $.ajax({ url: '" + $(this).attr('action').replace(/'/g, '\\\'') + "', type: '" + $(this).attr('method').toUpperCase() + "', data: _submitting_form.serialize(), dataType: 'html', success: function(d) { createWindow($(d).filter('title').text(), $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html(), '750px', '600px', Number(_submitting_form.closest('.wiki-window').css('top').replace(/px$/, '')) + 30 + 'px', Number(_submitting_form.closest('.wiki-window').css('left').replace(/px$/, '')) + 30 + 'px'); _submitting_form.closest('.wiki-window').remove(); }, error: function(d) { _submitting_form.closest('.wiki-window').remove(); } })";
+                                            const submitCode = "return confirm('현재 열린 창들을 닫고 양식을 전송합니다.');";
+                                            if(!$(this).attr('onsubmit')) {
+                                                $(this).attr('onsubmit', submitCode + ';');
+                                            } else {
+                                                $(this).attr('onsubmit', submitCode + '; ' + $(this).attr('onsubmit'));
+                                            }
+                                        });
+                                    }
                                 }
 
                                 linkWindow.children('div.wiki-article').text('');
@@ -294,6 +298,21 @@
                                 
                                 eval(main_css_get_post.toString().replace(/history[.]go[(]0[)][;]/, "$('#image_paste').closest('.wiki-window').remove();"));
                                 window.main_css_get_post = main_css_get_post;
+
+                                $('form#comment-submit-form').submit(function() {
+                                    const threadForm = $(this);
+
+                                    $.ajax({
+                                        type: "POST",
+                                        url: alink.attr('href'),
+                                        data: threadForm.serialize(),
+                                        complete: function(d) {
+                                            threadForm.find('textarea').text('');
+                                        }
+                                    });
+
+                                    return false;
+                                });
 
                                 linkAsNewWindow(linkWindow);
                             }
@@ -672,6 +691,23 @@
                     return false;
                 });
             });
+            
+            if(location.href.match(/\/thread\/\d{0,}/)) {
+                $('form[method="post"]').submit(function() {
+                    const threadForm = $(this);
+
+                    $.ajax({
+                        type: "POST",
+                        url: location.href,
+                        data: threadForm.serialize(),
+                        complete: function(d) {
+                            threadForm.find('textarea').text('');
+                        }
+                    });
+
+                    return false;
+                });
+            }
 
             if(qall('form').length) {
                 /* https://stackoverflow.com/questions/7317273/warn-user-before-leaving-web-page-with-unsaved-changes */
