@@ -235,12 +235,13 @@
             function linkAsNewWindow(win) {
                 if(getSetting('noLinkAsWindow') == '1') return;
 
-                win.find('.wiki-article a[href]:not([href="#"])').click(function() {
+                win.find('.wiki-article a[href]:not([href="#"]):not([nowindow])').click(function() {
                     if($(this).attr('href').toLowerCase().startsWith('javascript:')) return;
                     if($(this).attr('href').toLowerCase().startsWith('//')) return;
                     if($(this).attr('href').toLowerCase().startsWith('http://')) return;
                     if($(this).attr('href').toLowerCase().startsWith('https://')) return;
                     if($(this).attr('href').toLowerCase().startsWith('ftp://')) return;
+                    if($(this).attr('nowindow')) return;
                     if($(this).attr('data-setaswindow') == 'true') return;
 
                     $(this).attr('data-setaswindow', 'true');
@@ -599,6 +600,8 @@
                     '<div class=form-group>' +
                         '<h2>창 설정</h2>' + 
                         '<label><input type=checkbox id=noLinkAsWindow onclick="if($(this).is(\':checked\')) saveSetting(\'noLinkAsWindow\', \'1\'); else saveSetting(\'noLinkAsWindow\', \'0\');"> 링크를 창으로 열지 않음</label>' + 
+                        
+                        '<p><a href=/main_skin_set>[렌더러 및 기타 설정]</a></p>' +
                     '</div>', '480px', '320px');
 
                 if(getSetting('noLinkAsWindow') == '1') $("#noLinkAsWindow").attr('checked', '');
