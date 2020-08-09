@@ -305,7 +305,7 @@
                                             }
 
                                             // const submitCode = "var _submitting_form = $(this); $.ajax({ url: '" + $(this).attr('action').replace(/'/g, '\\\'') + "', type: '" + $(this).attr('method').toUpperCase() + "', data: _submitting_form.serialize(), dataType: 'html', success: function(d) { createWindow($(d).filter('title').text(), $(d).find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html(), '750px', '600px', Number(_submitting_form.closest('.wiki-window').css('top').replace(/px$/, '')) + 30 + 'px', Number(_submitting_form.closest('.wiki-window').css('left').replace(/px$/, '')) + 30 + 'px'); _submitting_form.closest('.wiki-window').remove(); }, error: function(d) { _submitting_form.closest('.wiki-window').remove(); } })";
-                                            const submitCode = "return confirm('현재 열린 창들을 닫고 양식을 전송합니다.');";
+                                            const submitCode = "return confirm('기술적인 한계 혹은 복잡함으로 제출 혹은 저장하려면 모든 창을 닫고 페이지를 새로고침해야합니다.');";
                                             if(!$(this).attr('onsubmit')) {
                                                 $(this).attr('onsubmit', submitCode + ';');
                                             } else {
@@ -318,7 +318,11 @@
                                 $html.find('a[href^="?"]').each(function() {
                                     const link = $(this);
                                     const href = link.attr('href');
-                                    link.attr('href', alink.attr('href') + href);
+
+                                    /* https://stackoverflow.com/questions/5631384/remove-everything-after-a-certain-character */
+                                    var currentHyperReference = alink.attr('href');
+                                    if(currentHyperReference.includes('?')) currentHyperReference = currentHyperReference.substring(0, currentHyperReference.indexOf('?'));
+                                    link.attr('href', currentHyperReference + href);
                                 });
 
                                 linkWindow.children('div.wiki-article').text('');
