@@ -289,7 +289,7 @@
                                 }
 
                                 linkWindow.children('div.wiki-article').text('');
-                                linkWindow.children('.titlebar').text( $html.filter('title').html()/*.replace((new RegExp('\\s[-]\\s{{ imp[1][0] }}' + '$')), '')*/ );
+                                linkWindow.children('.titlebar').text( $html.filter('title').html().replace((new RegExp('\\s[-]\\s{{ imp[1][0] }}' + '$')), '') );
                                 linkWindow.children('div.wiki-article').html( $html.find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html() );
                                 
                                 eval(main_css_get_post.toString().replace(/history[.]go[(]0[)][;]/, "$('#image_paste').closest('.wiki-window').remove();"));
