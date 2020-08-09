@@ -383,7 +383,7 @@
 
                     if($(el).attr('id') != 'toolsWindow') linkAsNewWindow($(el));
 
-                    $(el).children('.titlebar').click(function() {
+                    $(el).children('.titlebar').on('mousedown', function() {
                         $(this).parent().appendTo($(this).parent().parent());
                     });
 
