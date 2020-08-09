@@ -1,8 +1,10 @@
+<!DOCTYPE html>
+
 <head>
     <title>{{ imp[0] }} {% if imp[3][0] != 0 %}{{ imp[3][0] }}{% endif %} - {{ imp[1][0] }}</title>
 
     <meta charset=utf-8 />
-    <meta name=viewport content="width=device-width" />
+    <meta name=viewport content="width=device-width, initial-scale=1" />
 
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 
@@ -191,6 +193,8 @@
 
     <script>
         $(function () {
+			var windowCount = 0;
+		
             if($(window).width() >= 1080) $("grp.for-mobile").remove();
 
             const html = {
@@ -237,7 +241,7 @@
                                 linkWindow.children('div.wiki-article').text('');
                                 linkWindow.children('.titlebar').text( 'JSON' );
                                 linkWindow.children('div.wiki-article').html( '<pre>' + d.replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;').replace(/[&]/g, '&amp;') + '</pre>' );
-                            } catch(e) {
+							} catch(e) {
                                 const $html = $(d);
                                 
                                 if($html.find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content form').length) {
@@ -268,11 +272,13 @@
                                 
                                 linkAsNewWindow(linkWindow);
                             }
+							
+							$('.wiki-window#windowManager .wiki-article li[data-winid="' + linkWindow.attr('id') + '"]').text(linkWindow.children('.titlebar').text());
 
                             $('a[data-setaswindow="true"]').removeAttr('data-setaswindow');
                         },
                         error: function(d) {
-                            linkWindow.children('div.wiki-article').html('서버가 응답하지 않습니다.');
+                            linkWindow.children('div.wiki-article').html('오류가 있읍니다. <a href="' + alink.attr('href') + '">[새로 열기]</a>');
                             $('a[data-setaswindow="true"]').removeAttr('data-setaswindow');
                         }
                     });
@@ -316,9 +322,14 @@
                 });
 
                 $('div.wiki-window .close-btn').click(function() {
+					$('.wiki-window#windowManager .wiki-article').children('li[data-winid="' + $(this).parent().attr('id') + '"]').remove();
                     $(this).parent().remove();
                     $('a[data-setaswindow="true"]').removeAttr('data-setaswindow');
                 });
+			
+				$('.wiki-window#windowManager .wiki-article li').click(function() {
+					$('.wiki-window#' + $(this).attr('data-winid')).children('a.close-btn').click();
+				});
             }
 
             $('div.wiki-window .fold-btn').click(function() {
@@ -328,7 +339,7 @@
             setDraggable();
 
             function createWindow(title, content, width, height, top, left) {
-                const newWindow = $('<div class=wiki-window>' +
+                const newWindow = $('<div class=wiki-window id="' + String(++windowCount) + '">' +
                         '<div class=titlebar>' + title + '</div>' +
                         '<a title="닫기" class=close-btn>[-]</a>' +
                         '<div class=wiki-article>' + content + '</div>' +
@@ -339,6 +350,8 @@
                     'top': top ? top : null,
                     'left': left ? left : null
                 }).appendTo('grp.for-pc#windows');
+				
+				$('<li data-winid="' + String(windowCount) + '">' + html.escape(title) + '</li>').appendTo($(".wiki-window#windowManager .wiki-article"));
 
                 setDraggable();
 
@@ -349,6 +362,7 @@
 
             $('a#newWikiWindow').click(function() {
                 const title = prompt('문서 이름은?');
+				if(!title) return;
                 const wikiWindow = createWindow('문서 - ' + title, '불러오는 중...', '480px', '360px');
 
                 $.ajax({
@@ -548,7 +562,7 @@
         </a>
 
         <grp class=for-pc>
-            <a class=seporator></a>
+           <a class=seporator></a>
 
             <a href=/upload class=navigation-link title="파일 올리기">
                 <img src='data:image/png;base64,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' />
@@ -630,6 +644,13 @@
                 {% else %}
                     이 페이지에는 사용 가능한 도구가 없네요.. ^^;
                 {% endif %}
+            </div>
+        </div>
+        
+        <div class=wiki-window id=windowManager style="width: 200px;  left: 990px; top: 50px;">
+            <div class=titlebar>창 관리자</div>
+            <div class=wiki-article>
+                <label>눌러서 닫습니다.</label><br><br>
             </div>
         </div>
     </grp>
