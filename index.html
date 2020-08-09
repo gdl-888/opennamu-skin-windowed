@@ -27,7 +27,7 @@
         
         /*-------------------------------------------------------*/
         
-        button {
+        button, #toron tr:first-child #toron_color {
             border-radius: 10px;
             padding: 4px 8px 4px 8px;
             border: 2px solid rgb(123, 158, 188);
@@ -37,7 +37,17 @@
             min-width: 70px;
         }
         
-        button::before {
+        #toron_color_blue {
+            border-radius: 10px;
+            padding: 4px 8px 4px 8px;
+            border: 2px solid rgb(123, 158, 188);
+            background-image: linear-gradient(to bottom, rgb(234, 140, 220), rgb(255, 209, 251), rgb(255, 255, 255));
+            position: relative;
+            box-shadow: 1px 1px 5px #6b9fc0;
+            min-width: 70px;
+        }
+        
+        button::before, #toron_color_green::before, #toron tr:first-child #toron_color::before, #toron_color_blue::before {
             border-radius: 20px 20px 15px 10px;
             height: 10px;
             content: "";
@@ -48,7 +58,11 @@
             left: 1px;
         }
         
-        button:hover {
+        #toron_color_green::before, #toron_color_blue::before, #toron tr:first-child #toron_color::before {
+            height: 7px;
+        }
+        
+        button:hover, #toron_color_green {
             border-radius: 10px;
             padding: 4px 8px 4px 8px;
             border: 2px solid rgb(123, 158, 188);
