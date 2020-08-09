@@ -330,7 +330,7 @@
             function createWindow(title, content, width, height, top, left) {
                 const newWindow = $('<div class=wiki-window>' +
                         '<div class=titlebar>' + title + '</div>' +
-                        '<a title="닫기" class=close-btn>[×]</a>' +
+                        '<a title="닫기" class=close-btn>[-]</a>' +
                         '<div class=wiki-article>' + content + '</div>' +
                   '</div>');
                 newWindow.css({
@@ -610,7 +610,6 @@
     <grp class=for-pc id=windows>
         <div class=wiki-window id=mainWindow style="width: 750px; height: 600px; left: 225px; top: 50px;">
             <div class=titlebar>{{ imp[0] }} {% if imp[3][0] != 0 %}{{ imp[3][0] }}{% endif %}</div>
-            <a title="접기" class=fold-btn>[-]</a>
             <div class=wiki-article>
                 <div class=wiki-inner-content>{{ data|safe }}</div>
                 
@@ -621,7 +620,6 @@
         
         <div class=wiki-window id=toolsWindow style="width: 200px;  left: 10px; top: 50px;">
             <div class=titlebar>메뉴</div>
-            <a title="접기" class=fold-btn>[-]</a>
             <div class=wiki-article>
                 {% if menu != 0 %}
                     {% for item in menu %}
