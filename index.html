@@ -153,6 +153,15 @@
             position: relative;
         }
         
+        div.wiki-window:last-child .titlebar {
+            background-image: linear-gradient(to bottom, rgb(100, 169, 238), rgb(133, 192, 251), rgb(255, 255, 255));
+            
+            font-weight: bold;
+            text-shadow: 1px 1px 0px black;
+            
+            color: white;
+        }
+        
         div.wiki-window .titlebar::before {
             border-radius: 20px 20px 15px 10px;
             height: 10px;
@@ -839,13 +848,10 @@
     </grp>
 
     <grp class=for-pc id=windows>
-        <div class=wiki-window id=mainWindow style="width: 750px; height: 600px; left: 225px; top: 50px;">
-            <div class=titlebar>{{ imp[0] }} {% if imp[3][0] != 0 %}{{ imp[3][0] }}{% endif %}</div>
+        <div class=wiki-window id=windowManager style="width: 200px;  left: 990px; top: 50px;">
+            <div class=titlebar>창 관리자</div>
             <div class=wiki-article>
-                <div class=wiki-inner-content>{{ data|safe }}</div>
-                
-                <br />
-                <p>{{ imp[1][1]|safe }}</p>
+                <label>눌러서 닫습니다.</label><br><br>
             </div>
         </div>
         
@@ -863,11 +869,14 @@
                 {% endif %}
             </div>
         </div>
-        
-        <div class=wiki-window id=windowManager style="width: 200px;  left: 990px; top: 50px;">
-            <div class=titlebar>창 관리자</div>
+
+        <div class=wiki-window id=mainWindow style="width: 750px; height: 600px; left: 225px; top: 50px;">
+            <div class=titlebar>{{ imp[0] }} {% if imp[3][0] != 0 %}{{ imp[3][0] }}{% endif %}</div>
             <div class=wiki-article>
-                <label>눌러서 닫습니다.</label><br><br>
+                <div class=wiki-inner-content>{{ data|safe }}</div>
+                
+                <br />
+                <p>{{ imp[1][1]|safe }}</p>
             </div>
         </div>
     </grp>
