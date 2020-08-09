@@ -9,3 +9,11 @@
 - jQuery - MIT / 저작권자 JS Foundation 및 기타 기여자
 - jQuery UI - 저작권자 및 라이선스는 위와 같음
 - 참고한 기타 코드는 index.html에 링크로...
+
+## 구형 브라우저에서의 모습
+![크롬 6.0](https://raw.githubusercontent.com/gdl-888/opennamu-skin-windowed/master/chrome60.bmp)
+2010년 출시치고는 정상작동.
+
+![IE 7](https://raw.githubusercontent.com/gdl-888/opennamu-skin-windowed/master/ie7.bmp)
+(.................) 
+전술했듯 호환성을 고려하지 않은 스킨.
