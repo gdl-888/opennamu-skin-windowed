@@ -148,15 +148,15 @@
             
             border-radius: 10px 10px 0 0;
             padding: 4px 6px 4px 6px;
-            border: 2px solid rgb(123, 158, 188);
-            background-image: linear-gradient(to bottom, rgb(140, 187, 234), rgb(209, 232, 255), rgb(255, 255, 255));
+            border: 2px solid rgb(180, 199, 216);
+            background-image: linear-gradient(to bottom, rgb(140, 187, 234), rgb(209, 232, 255), aliceblue);
             position: relative;
             
-            border-width: 4px 4px 2px 4px;
+            border-width: 4px 4px 0px 4px;
         }
         
         div.wiki-window:last-child .titlebar {
-            background-image: linear-gradient(to bottom, rgb(100, 169, 238), rgb(133, 192, 251), rgb(255, 255, 255));
+            background-image: linear-gradient(to bottom, rgb(100, 169, 238), rgb(133, 192, 251), aliceblue);
             
             font-weight: bold;
             text-shadow: 1px 1px 0px black;
@@ -177,12 +177,20 @@
         
         div.wiki-window .wiki-article {
             padding: 12px;
-            border: 2px solid rgb(123, 158, 188);
+            border: 2px solid rgb(180, 199, 216);
             border-top: none;
             background: aliceblue;
             height: calc(100% - 55px);
             overflow: auto;
-            border-width: 2px 4px 4px 4px;
+            border-width: 0px 4px 4px 4px;
+        }
+        
+        div.wiki-window:last-child .wiki-article {
+            border-color: rgb(123, 158, 188);
+        }
+        
+        div.wiki-window:last-child .titlebar {
+            border-color: rgb(123, 158, 188);
         }
         
         div.wiki-window .close-btn, div.wiki-window .fold-btn {
