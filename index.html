@@ -155,7 +155,7 @@
             border: 2px solid rgb(123, 158, 188);
             border-top: none;
             background: aliceblue;
-            height: 100%;
+            height: calc(100% - 55px);
             overflow: auto;
         }
         
@@ -196,7 +196,7 @@
             /* http://hompylove.com/system/bbs/board.php?bo_table=tip&wr_id=14, https://webisfree.com/2015-02-04/[자바스크립트]-쿠키(cookie)-저장-및-삭제-예제보기 참고함 */
             function saveSetting(name, val) {
                 var d = new Date(); d.setDate(d.getDate()+365);
-                document.cookie = escape(name) + '=' + escape(val) + ';expires=' + d.toUTCString();
+                document.cookie = escape(name) + '=' + escape(val) + ';'; /* + ';expires=' + d.toUTCString() + ';path=/'; */
             }
 
             function getSetting(name) {
@@ -340,6 +340,13 @@
                     $(el).children('.titlebar').click(function() {
                         $(this).parent().appendTo($(this).parent().parent());
                     });
+
+                    if($(el).attr('id') != 'toolsWindow' && $(el).attr('id') != 'windowManager') {
+                        $(el).resizable({
+                            minWidth:  '160px',
+                            minHeight: '60px'
+                        });
+                    }
                 });
 
                 $('div.wiki-window .close-btn').click(function() {
