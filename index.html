@@ -309,6 +309,10 @@
                     });
 
                     if($(el).attr('id') != 'toolsWindow') linkAsNewWindow($(el));
+
+                    $(el).click(function() {
+                        $(this).appendTo($(this).parent());
+                    });
                 });
 
                 $('div.wiki-window .close-btn').click(function() {
