@@ -401,7 +401,7 @@
                                 linkAsNewWindow(linkWindow);
                             }
 							
-							$('.wiki-window#windowManager .wiki-article li[data-winid="' + linkWindow.attr('id') + '"]').text(linkWindow.children('.titlebar').text());
+							$('.wiki-window#windowManager .wiki-article li[data-winid="' + linkWindow.attr('id') + '"]').html(html.escape(linkWindow.children('.titlebar').text()) + ' <a class=close-link>[×]</a>');
 
                             $('a[data-setaswindow="true"]').removeAttr('data-setaswindow');
                         },
