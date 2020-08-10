@@ -3,6 +3,8 @@
 <head>
     <title>{{ imp[0] }} {% if imp[3][0] != 0 %}{{ imp[3][0] }}{% endif %} - {{ imp[1][0] }}</title>
 
+    <meta name=pagetitle content="{{ imp[0] }} {% if imp[3][0] != 0 %}{{ imp[3][0] }}{% endif %}" />
+
     <meta charset=utf-8 />
     <meta name=viewport content="width=device-width, initial-scale=1" />
 
@@ -235,6 +237,10 @@
             border: 1px dashed rgb(192, 192, 192);
             margin: 10px 0 10px 0;
         }
+        
+        .wiki-window#windowManager .wiki-article li {
+            cursor: pointer;
+        }
     </style>
 
     <script>
@@ -283,7 +289,7 @@
             function linkAsNewWindow(win) {
                 if(getSetting('noLinkAsWindow') == '1') return;
 
-                win.find('.wiki-article a[href]:not([href="#"]):not([nowindow])').click(function() {
+                win.find('.wiki-article a[href]:not([href="#"]):not([nowindow]):not([href^="/logout"]):not([href^="%2flogout"]):not([href^="%2Flogout"])').click(function() {
                     if($(this).attr('href').toLowerCase().startsWith('javascript:')) return;
                     if($(this).attr('href').toLowerCase().startsWith('//')) return;
                     if($(this).attr('href').toLowerCase().startsWith('http://')) return;
@@ -351,7 +357,7 @@
                                 });
 
                                 linkWindow.children('div.wiki-article').text('');
-                                linkWindow.children('.titlebar').text( $html.filter('title').html().replace((new RegExp('\\s[-]\\s{{ imp[1][0] }}' + '$')), '') );
+                                linkWindow.children('.titlebar').text( $html.filter('meta[name="pagetitle"]').attr('content') );
                                 linkWindow.children('div.wiki-article').html( $html.find('div.wiki-window#mainWindow .wiki-article .wiki-inner-content').html() );
                                 
                                 eval(main_css_get_post.toString().replace(/history[.]go[(]0[)][;]/, "$('#image_paste').closest('.wiki-window').remove();"));
@@ -418,7 +424,7 @@
 
                     if($(el).attr('id') != 'toolsWindow') linkAsNewWindow($(el));
 
-                    $(el).children('.titlebar').on('mousedown', function() {
+                    $(el).children('.titlebar').on('mousedown', function(e) {
                         $(this).parent().appendTo($(this).parent().parent());
                     });
 
@@ -437,7 +443,12 @@
                 });
 			
 				$('.wiki-window#windowManager .wiki-article li').click(function() {
-					$('.wiki-window#' + $(this).attr('data-winid')).children('a.close-btn').click();
+					const win = $('.wiki-window#' + $(this).attr('data-winid'));
+                    win.appendTo(win.parent());
+				});
+			
+				$('.wiki-window#windowManager .wiki-article li a.close-link').click(function() {
+					$('.wiki-window#' + $(this).parent().attr('data-winid')).children('a.close-btn').click();
 				});
             }
 
@@ -461,7 +472,7 @@
                     'left': left ? left : Number($('.wiki-window:last-child').css('left').replace(/px$/, '')) + 30 + 'px'
                 }).appendTo('grp.for-pc#windows');
 				
-				if(closeable) $('<li data-winid="' + String(windowCount) + '">' + html.escape(title) + '</li>').appendTo($(".wiki-window#windowManager .wiki-article"));
+				if(closeable) $('<li data-winid="' + String(windowCount) + '">' + html.escape(title) + ' <a class=close-link>[×]</a></li>').appendTo($(".wiki-window#windowManager .wiki-article"));
 
                 setDraggable();
 
@@ -945,14 +956,15 @@
 
     <grp class=for-pc id=windows>
         <div class=wiki-window id=windowManager style="width: 200px;  left: 990px; top: 50px;">
-            <div class=titlebar>창 관리자</div>
+            <div class=titlebar>창 전환기</div>
             <div class=wiki-article>
-                <label>눌러서 닫습니다.</label><br><br>
+                <li data-winid=toolsWindow>메뉴 모음</li>
+                <li data-winid=mainWindow>{{ imp[0] }} {% if imp[3][0] != 0 %}{{ imp[3][0] }}{% endif %}</li>
             </div>
         </div>
         
         <div class=wiki-window id=toolsWindow style="width: 200px;  left: 10px; top: 50px;">
-            <div class=titlebar>메뉴</div>
+            <div class=titlebar>메뉴 모음</div>
             <div class=wiki-article>
                 {% if menu != 0 %}
                     {% for item in menu %}
