@@ -712,12 +712,14 @@
 
                     '<div class=form-group>' +
                         '<h2>창 설정</h2>' + 
-                        '<label><input type=checkbox id=noLinkAsWindow onclick="if($(this).is(\':checked\')) saveSetting(\'noLinkAsWindow\', \'1\'); else saveSetting(\'noLinkAsWindow\', \'0\');"> 링크를 창으로 열지 않음</label>' + 
+                        '<label><input type=checkbox id=noLinkAsWindow onclick="if($(this).is(\':checked\')) saveSetting(\'noLinkAsWindow\', \'1\'); else saveSetting(\'noLinkAsWindow\', \'0\'); setSettings();"> 링크를 창으로 열지 않음</label><br>' + 
+                        '<label><input type=checkbox id=winManagerOnTop onclick="if($(this).is(\':checked\')) saveSetting(\'winManagerOnTop\', \'1\'); else saveSetting(\'winManagerOnTop\', \'0\'); setSettings();"> 창 전환기를 항상 위에 표시</label><br>' + 
                         
                         '<p><a href=/main_skin_set>[렌더러 및 기타 설정]</a></p>' +
                     '</div>', '480px', '320px');
 
                 if(getSetting('noLinkAsWindow') == '1') $("#noLinkAsWindow").attr('checked', '');
+                if(getSetting('winManagerOnTop') == '1') $("#winManagerOnTop").attr('checked', '');
             });
 
             $('a#suspendAccountWindow').click(function() {
@@ -866,6 +868,15 @@
                     return msg;
                 });
             }
+
+            function setSettings() {
+                if(getSetting('winManagerOnTop') == '1') $("#windowManager").css('z-index', '11');
+                else $("#windowManager").css('z-index', '9');
+            }
+
+            setSettings();
+
+            window.setSettings = setSettings;
         });
     </script>
 </head>
