@@ -241,6 +241,26 @@
         .wiki-window#windowManager .wiki-article li {
             cursor: pointer;
         }
+        
+        tr {
+            background-color: rgb(238,242,248);
+            border-color: rgb(82, 115, 134);
+        }
+        
+        tr:nth-child(even) {
+            background-color: rgb(225,234,242);
+        }
+        
+        tr:hover {
+            background-color: #eff6ff;
+        }
+        
+        a[href^="/tool/"] {
+            background-image: url(data:image/png;base64,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);
+            background-size: 20px;
+            background-repeat: no-repeat;
+            color: transparent;
+        }
     </style>
 
     <script>
@@ -716,7 +736,7 @@
                         '<div class=form-group>' +
                             '<label>차단 기간: </label><br>' +
                             '<select size=5 name=second class=form-control>' + 
-                                '<option value=0>영구</option>' +
+                                '<option value=0 selected>영구</option>' +
                                 '<option value=-1>차단 풀기</option>' +
                                 '<option value=60>1분</option>' +
                                 '<option value=300>5분</option>' +
