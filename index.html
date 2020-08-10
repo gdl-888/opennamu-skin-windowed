@@ -222,10 +222,17 @@
         
         select, textarea, input:not([type="checkbox"]):not([type="radio"]):not(.nostyle):not([type="button"]):not([type="submit"]):not([type="reset"]) {
             width: 100%;
-            border: 2px inset rgb(192, 192, 192);
+            border: 2px solid gray;
+            box-shadow: inset 3px 3px 3px rgb(192, 192, 192);
             border-radius: 5px;
             padding: 5px;
             margin: 0 0 20px 0;
+            transition: 0.3s;
+        }
+        
+        select:focus, textarea:focus, input:not([type="checkbox"]):not([type="radio"]):not(.nostyle):not([type="button"]):not([type="submit"]):not([type="reset"]):focus {
+            border: 2px solid #3383a8;
+            box-shadow: inset 3px 3px 3px rgb(125, 186, 219);
         }
         
         textarea {
@@ -401,7 +408,7 @@
                                 linkAsNewWindow(linkWindow);
                             }
 							
-							$('.wiki-window#windowManager .wiki-article li[data-winid="' + linkWindow.attr('id') + '"]').html(html.escape(linkWindow.children('.titlebar').text()) + ' <a class=close-link>[×]</a>');
+							$('.wiki-window#windowManager .wiki-article li[data-winid="' + linkWindow.attr('id') + '"]').html(html.escape(linkWindow.children('.titlebar').text()) + ' <a class=close-link>×</a>');
 
                             $('a[data-setaswindow="true"]').removeAttr('data-setaswindow');
                         },
@@ -448,7 +455,7 @@
                         $(this).parent().appendTo($(this).parent().parent());
                     });
 
-                    if($(el).attr('id') != 'toolsWindow' && $(el).attr('id') != 'windowManager') {
+                    if($(el).attr('id') != 'toolsWindow') {
                         $(el).resizable({
                             minWidth:  '160px',
                             minHeight: '60px'
@@ -492,7 +499,7 @@
                     'left': left ? left : Number($('.wiki-window:last-child').css('left').replace(/px$/, '')) + 30 + 'px'
                 }).appendTo('grp.for-pc#windows');
 				
-				if(closeable) $('<li data-winid="' + String(windowCount) + '">' + html.escape(title) + ' <a class=close-link>[×]</a></li>').appendTo($(".wiki-window#windowManager .wiki-article"));
+				if(closeable) $('<li data-winid="' + String(windowCount) + '">' + html.escape(title) + ' <a class=close-link>×</a></li>').appendTo($(".wiki-window#windowManager .wiki-article"));
 
                 setDraggable();
 
@@ -986,7 +993,7 @@
     </grp>
 
     <grp class=for-pc id=windows>
-        <div class=wiki-window id=windowManager style="width: 200px;  left: 990px; top: 50px;">
+        <div class=wiki-window id=windowManager style="width: 200px; height: 270px; left: 10px; top: 50px;">
             <div class=titlebar>창 전환기</div>
             <div class=wiki-article>
                 <li data-winid=toolsWindow>메뉴 모음</li>
@@ -994,7 +1001,7 @@
             </div>
         </div>
         
-        <div class=wiki-window id=toolsWindow style="width: 200px;  left: 10px; top: 50px;">
+        <div class=wiki-window id=toolsWindow style="width: 200px; left: 10px; top: 340px;">
             <div class=titlebar>메뉴 모음</div>
             <div class=wiki-article>
                 {% if menu != 0 %}
