@@ -23,7 +23,6 @@
 			background-size: cover;
 			background-repeat: no-repeat;
 			font-family: "돋움";
-			margin: 0;
 			overflow: hidden;
         }
         
@@ -86,18 +85,22 @@
         div.navigation-bar {
             padding: 10px 12px 10px 12px;
             border: 2px solid rgb(123, 158, 188);
-            border-width: 0 0 2px 0;
             background-image: linear-gradient(to bottom, rgb(140, 187, 234), rgb(209, 232, 255), rgb(255, 255, 255));
+            position: relative;
+            border-radius: 18px;
+            margin-top: -15px;
+            z-index: 100;
         }
         
         div.navigation-bar::before {
-            height: 10px;
+            height: 20px;
             content: "";
             background-image: linear-gradient(to bottom, rgba(255, 255, 255, 8), rgba(255, 255, 255, .4));
             position: absolute;
             width: 100%;
             margin: -10px 0 0 0;
             left: 0px;
+            border-radius: 44px 44px 18px 18px
         }
         
         a.navigation-link {
@@ -267,6 +270,57 @@
             background-size: 20px;
             background-repeat: no-repeat;
             color: transparent;
+        }
+        
+        .glossy-round-btn {
+            border: 2px solid rgb(127, 166, 214);
+            border-radius: 12345678px;
+            padding: 4px;
+            background: linear-gradient(to bottom, rgb(108, 154, 211) 30%, rgb(237, 244, 254) 100%);
+            color: rgb(27, 75, 143);
+            position: relative;
+            font-size: 16pt;
+            box-shadow: 2px 2px 2px rgb(0, 64, 128);
+        }
+        
+        .glossy-round-btn.sm {
+            font-size: 10pt;
+        }
+        
+        .glossy-round-btn.xsm {
+            font-size: 8pt;
+            border-width: 1px;
+            padding: 2px;
+        }
+        
+        .glossy-round-btn::before {
+            background: linear-gradient(to bottom, #fff, rgba(255, 255, 255, 0.6));
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            content: "";
+            left: 0px;
+            top: 0px;
+            border-top-left-radius: 2463px 2159px;
+            border-top-right-radius: 2463px 2159px;
+            border-bottom-left-radius: 2500px 258px;
+            border-bottom-right-radius: 2500px 258px;
+        }
+        
+        .glossy-round-btn:hover {
+            background: linear-gradient(to bottom, rgb(125, 184, 236) 30%, rgb(234, 244, 253) 100%);
+            color: rgb(51, 128, 206);
+        }
+        
+        .glossy-round-btn:active {
+            background: linear-gradient(to bottom, rgb(108, 154, 211) 30%, rgb(237, 244, 254) 100%);
+            box-shadow: inset 4px 4px 2px rgb(0, 64, 128);
+        }
+        
+        .glossy-round-btn[disabled] {
+            background: linear-gradient(to bottom, rgb(108, 154, 211) 30%, rgb(237, 244, 254) 100%);
+            color: rgb(122, 155, 201);
+            box-shadow: 2px 2px 2px rgb(0, 64, 128);
         }
     </style>
 
@@ -499,7 +553,7 @@
                     'left': left ? left : Number($('.wiki-window:last-child').css('left').replace(/px$/, '')) + 30 + 'px'
                 }).appendTo('grp.for-pc#windows');
 				
-				if(closeable) $('<li data-winid="' + String(windowCount) + '">' + html.escape(title) + ' <a class=close-link>×</a></li>').appendTo($(".wiki-window#windowManager .wiki-article"));
+				$('<li data-winid="' + String(windowCount) + '">' + html.escape(title) + (closeable ? ' <a class=close-link>×</a>' : '') + '</li>').appendTo($(".wiki-window#windowManager .wiki-article"));
 
                 setDraggable();
 
