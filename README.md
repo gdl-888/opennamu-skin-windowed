@@ -1,5 +1,6 @@
 # opennamu-skin-windowed
 ![미리보기](https://github.com/gdl-888/opennamu-skin-windowed/blob/master/preview.gif?raw=true)
+(* 이미지의 스큐어모피즘 디자인이 마음에 들지 않는다면 스킨 설정에서 심플/플랫디자인으로 바꿀 수 있읍니다)
 
 이 스킨은 딱히 호환성을 고려하지 않았읍니다. 자바스크립트에 의존적입니다.
 
