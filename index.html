@@ -687,6 +687,20 @@
             /* https://www.w3schools.com/howto/howto_js_draggable.asp 참고함 */
             function setDraggable() {
                 $('div.wiki-window').draggable({ handle: '.titlebar' });
+		
+		if($(el).attr('id') != 'toolsWindow') linkAsNewWindow($(el));
+
+		$(el).children('.titlebar').on('mousedown', function(e) {
+			$(this).parent().appendTo($(this).parent().parent());
+		});
+
+		if($(el).attr('id') != 'toolsWindow') {
+			$(el).resizable({
+			    minWidth:  '160px',
+			    minHeight: '60px'
+			});
+		}
+		    
                 $('div.wiki-window .close-btn').click(function() {
 					win = $(this);
 				
