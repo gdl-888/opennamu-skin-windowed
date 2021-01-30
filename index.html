@@ -686,45 +686,7 @@
 
             /* https://www.w3schools.com/howto/howto_js_draggable.asp 참고함 */
             function setDraggable() {
-                $('div.wiki-window').each(function() {
-                    const el = $(this)[0];
-                    $(el).children('.titlebar')[0].onmousedown = (function(e) {
-                        if(!e) e = window.event;
-                        e.preventDefault();
-
-                        document.onmouseup = (function() {
-                            document.onmouseup = null;
-                            document.onmousemove = null;
-                        });
-
-                        ox = e.clientX, oy = e.clientY;
-
-                        document.onmousemove = (function(e) {
-                            if(!e) e = window.event;
-                            e.preventDefault();
-
-                            px = ox - e.clientX, py = oy - e.clientY;
-                            ox = e.clientX, oy = e.clientY;
-
-                            el.style.top  = el.offsetTop  - py + 'px';
-                            el.style.left = el.offsetLeft - px + 'px';
-                        });
-                    });
-
-                    if($(el).attr('id') != 'toolsWindow') linkAsNewWindow($(el));
-
-                    $(el).children('.titlebar').on('mousedown', function(e) {
-                        $(this).parent().appendTo($(this).parent().parent());
-                    });
-
-                    if($(el).attr('id') != 'toolsWindow') {
-                        $(el).resizable({
-                            minWidth:  '160px',
-                            minHeight: '60px'
-                        });
-                    }
-                });
-
+                $('div.wiki-window').draggable({ handle: '.titlebar' });
                 $('div.wiki-window .close-btn').click(function() {
 					win = $(this);
 				
