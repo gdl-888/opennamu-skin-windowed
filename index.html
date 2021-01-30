@@ -684,14 +684,16 @@
                 });
             }
 
-            /* https://www.w3schools.com/howto/howto_js_draggable.asp 참고함 */
             function setDraggable() {
                 $('div.wiki-window').draggable({ handle: '.titlebar' });
-		
-		if($(el).attr('id') != 'toolsWindow') linkAsNewWindow($(el));
 
-		$(el).children('.titlebar').on('mousedown', function(e) {
+		$('div.window').children('.titlebar').on('mousedown', function(e) {
 			$(this).parent().appendTo($(this).parent().parent());
+		});
+
+		$('div.window:not(#toolsWindow)').resizable({
+			minWidth:  '160px',
+			minHeight: '60px'
 		});
 
 		if($(el).attr('id') != 'toolsWindow') {
